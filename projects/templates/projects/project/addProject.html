@@ -8,7 +8,7 @@
     </head>
     <body>
         <h1>hello project</h1>
-        <form action="#" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'project_addProjectDB' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
             Title: <input type="text" name="title"><br><br>
             Details: <input type="text" name="details"><br><br>
@@ -20,10 +20,12 @@
             </select><br><br>
             Tags: <p id="tagButton" onclick="addTag()">Add Tag</p>
             <div id="tagContainer"></div>
-            Images: <input type="file" name="image[]" multiple><br><br>
-            Target: <input type="number" name="target"><br><br>
+            Photos: <p id="photoButton" onclick="addPhoto()">Add Photo</p>
+            <div id="photoContainer"></div>
+            Target: <input type="number" name="total_target"><br><br>
             Start Date: <input type="date" name="start_date"><br><br>
             End Date: <input type="date" name="end_date"><br><br>
+            <input type="text" id="countImg" name="counterImg" style="display:none">
             <input type="submit">
         </form>
         <script src="{% static 'projects/js/main.js' %}"></script>
