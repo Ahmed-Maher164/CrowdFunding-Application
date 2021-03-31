@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from users.models import Users
 from django.contrib.auth import authenticate
 
+
+
 class RegistraionForm(UserCreationForm):
     email = forms.EmailField()
     class Meta:
@@ -16,13 +18,17 @@ class LoginForm(forms.ModelForm):
         model = Users
         fields = ('email','password')
 
-#=================================================================================================
-    def clean(self):
-        if self.is_valid():
-            email = self.cleaned_data['email']
-            password = self.cleaned_data['password']
-            if not authenticate(email=email,password=password):
-                raise forms.ValidationError('invalid login data...')
+    def clean(self,*args,**kwargs):
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+
+        if email and password:
+            user = authenticate(username=email,password=password)
+            if not user:
+                raise forms.ValidationError("The user not exist")
+            if not user.check_password(password):
+                raise forms.ValidationError("the password not correct")
+
 
 #===================================================================================================
 
