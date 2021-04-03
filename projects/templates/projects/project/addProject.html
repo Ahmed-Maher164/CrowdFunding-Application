@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Add Project</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-<h1>hello project</h1>
-<form action="POST">
-    Title: <input type="text" name="title"><br><br>
-    Details: <input type="text" name="details"><br><br>
-    Categories:
-    <select name="categories">
-        {% for category in all_categories %}
-        <option value="{{category.id}}">{{category.category_name }}</option>
-        {% endfor %}
-    </select><br><br>
-    Images<input type="file" name="image[]" multiple><br><br>
-    Target <input type="number" name="target"><br><br>
-    Start Date <input type="date" name="start_date"><br><br>
-    End Date <input type="date" name="end_date"><br><br>
-
-    <input type="submit">
-</form>
-
-</body>
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <title>Add Project</title>
+        <link rel="stylesheet" href="{% static 'projects/css/style.css' %}">
+    </head>
+    <body>
+        <h1>hello project</h1>
+        <form action="{% url 'project_addProjectDB' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            Title: <input type="text" name="title"><br><br>
+            Details: <input type="text" name="details"><br><br>
+            Categories:
+            <select name="categories">
+                {% for category in all_categories %}
+                <option value="{{category.id}}">{{ category.category_name }}</option>
+                {% endfor %}
+            </select><br><br>
+            Tags: <p id="tagButton" onclick="addTag()">Add Tag</p>
+            <div id="tagContainer"></div>
+            Photos: <p id="photoButton" onclick="addPhoto()">Add Photo</p>
+            <div id="photoContainer"></div>
+            Target: <input type="number" name="total_target"><br><br>
+            Start Date: <input type="date" name="start_date"><br><br>
+            End Date: <input type="date" name="end_date"><br><br>
+            <input type="text" id="countImg" name="counterImg" style="display:none">
+            <input type="submit">
+        </form>
+        <script src="{% static 'projects/js/main.js' %}"></script>
+    </body>
 </html>
