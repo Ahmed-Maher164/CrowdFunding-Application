@@ -9,7 +9,7 @@ class RegistraionForm(UserCreationForm):
     email = forms.EmailField()
     class Meta:
         model = Users
-        fields = ('email','first_name','last_name','phone','photo','password1','password2')
+        fields = ('email','username','first_name','last_name','phone','photo','password1','password2')
 
 #================================================================================================
 class LoginForm(forms.ModelForm):
@@ -18,17 +18,11 @@ class LoginForm(forms.ModelForm):
         model = Users
         fields = ('email','password')
 
-    def clean(self,*args,**kwargs):
-        email = self.cleaned_data.get("email")
-        password = self.cleaned_data.get("password")
-
-        if email and password:
-            user = authenticate(username=email,password=password)
-            if not user:
-                raise forms.ValidationError("The user not exist")
-            if not user.check_password(password):
-                raise forms.ValidationError("the password not correct")
-
-
+    def clean(self):
+        if self.is_valid():
+            email = self.cleaned_data['email']
+            password = self.cleaned_data['password']
+            if not authenticate(email=email,password=password):
+                raise forms.ValidationError('invalid login data...')
 #===================================================================================================
 

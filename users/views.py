@@ -7,8 +7,8 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from users.models import Users
 import datetime
-from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -19,6 +19,7 @@ def register(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
+            print(user)
             send_email(
                 user,
                 get_current_site(request),
@@ -90,7 +91,7 @@ def activate(request, uidb64, time):
     else:
         return render(request, "users/sending_email.html", {"active_code": 3})
 
-def login(request):
+def user_login(request):
     if request.user.is_authenticated:
         return redirect('/')
 
@@ -100,17 +101,17 @@ def login(request):
             email = request.POST.get('email')
             password = request.POST.get('password')
             user = authenticate(email=Users.objects.get(email=email) ,password=password)
-            print(user)
-            if user is not None:
-                if user.is_active:
-                    login(request,user)
-                    return HttpResponse('/')
-                else:
-                    return HttpResponse("Your account was inactive.")
+            if user:
+                login(request, user)
+                return redirect('/')
     else:
         form = LoginForm()
     return render(request, 'users/login.html', {'form' : form})
 
 def index(request):
     return render(request, "users/index.html")
+
+def logout_view(request):
+    logout(request)
+    return redirect('/login')
 
