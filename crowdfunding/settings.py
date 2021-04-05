@@ -29,6 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+AUTH_USER_MODEL = 'users.Users'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -77,21 +80,26 @@ WSGI_APPLICATION = 'crowdfunding.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
+
         'ENGINE': "django.db.backends.mysql",
         'NAME': 'crowdfunding',
         'USER': 'maher',
         'PASSWORD': 'maher123',
         'HOST': '127.0.0.1',
+
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': "django.db.backends.mysql",
+#         'NAME': 'crowdfunding',
+#         'USER': 'ibrahim',
+#         'PASSWORD': 'ibrahim123',
+#         'HOST': '127.0.0.1',
+#     }
+# }
 
 
 # Password validation
