@@ -38,3 +38,14 @@ def addProjectDB(request):
             photo_obj.save()
 
         return redirect('project_add')
+
+
+def viewProject(request , project_id):
+    project=Project.objects.get(id=project_id)
+    images=Picture.objects.filter(project_id=project_id)
+    return render(request,'projects/project/viewProject.html' , {"project":project , "images":images})
+
+
+def deleteProject(request, project_id):
+    Project.objects.filter(id=project_id).delete()
+    return redirect('project_add')

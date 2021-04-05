@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>viewProject</title>
+</head>
+<body>
+<table border="2">
+     <tr>
+         <th>Title</th>
+         <th>Details</th>
+         <th>Total Target</th>
+         <th>Start Date</th>
+         <th>End Date</th>
+     </tr>
+     <tr>
+         <td>{{ project.title }}</td>
+         <td>{{ project.details }}</td>
+         <td>{{ project.total_target }}</td>
+         <td>{{ project.start_date }}</td>
+         <td>{{ project.end_date }}</td>
+     </tr>
+ </table>
+    {% for img in images %}
+        <img src="{{ img.photo.url }}" width="300" height="300">
+     {% endfor %}
+<br><br>
+    {% if project.total_target < 50000 %}
+        <form action="{% url 'project_delete' project.id  %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <input type="submit" value="Delete"/>
+        </form>
+    {% endif %}
+</body>
+</html>
