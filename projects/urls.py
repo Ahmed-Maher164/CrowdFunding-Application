@@ -5,7 +5,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('project/add', project.addProject, name="project_add"),
-    path('project/addDB', project.addProjectDB, name="project_addProjectDB")
+    path('project/addDB', project.addProjectDB, name="project_addProjectDB"),
+    path('project/view/<project_id>', project.viewProject, name="project_view"),
+    path('project/delete/<project_id>', project.deleteProject, name="project_delete")
 ]
 
 if settings.DEBUG:
