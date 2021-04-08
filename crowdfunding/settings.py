@@ -36,6 +36,7 @@ AUTH_USER_MODEL = 'users.Users'
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
+    'clearcache',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,15 +81,21 @@ WSGI_APPLICATION = 'crowdfunding.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#
+#         'ENGINE': "django.db.backends.mysql",
+#         'NAME': 'crowdfunding',
+#         'USER': 'pmauser',
+#         'PASSWORD': 'Mohamed_123',
+#         'HOST': '127.0.0.1',
+#
+#     }
+# }
 DATABASES = {
     'default': {
-
-        'ENGINE': "django.db.backends.mysql",
-        'NAME': 'crowdfunding',
-        'USER': 'maher',
-        'PASSWORD': 'maher123',
-        'HOST': '127.0.0.1',
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / "db.sqlite3"),
     }
 }
 # DATABASES = {

@@ -9,6 +9,7 @@ from users.models import Users
 import datetime
 from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -91,6 +92,7 @@ def activate(request, uidb64, time):
     else:
         return render(request, "users/sending_email.html", {"active_code": 3})
 
+
 def user_login(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -108,6 +110,7 @@ def user_login(request):
         form = LoginForm()
     return render(request, 'users/login.html', {'form' : form})
 
+@login_required(login_url='/login')
 def index(request):
     return render(request, "users/index.html")
 
