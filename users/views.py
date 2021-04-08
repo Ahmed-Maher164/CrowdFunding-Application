@@ -1,5 +1,5 @@
-from users.forms import RegistraionForm, LoginForm
-from django.shortcuts import render, redirect
+from users.forms import RegistraionForm, LoginForm, UpdateUserForm
+from django.shortcuts import render, redirect, reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -9,7 +9,7 @@ from users.models import Users
 import datetime
 from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def register(request):
@@ -91,6 +91,7 @@ def activate(request, uidb64, time):
     else:
         return render(request, "users/sending_email.html", {"active_code": 3})
 
+
 def user_login(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -114,4 +115,13 @@ def index(request):
 def logout_view(request):
     logout(request)
     return redirect('/login')
+
+
+
+
+def user_profile(request):
+    if not request.user.is_authenticated:
+        return redirect(reverse("users:login"))
+    return render(request, "users/user_profile.html")
+
 

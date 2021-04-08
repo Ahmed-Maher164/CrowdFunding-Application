@@ -34,6 +34,11 @@ class Users(AbstractBaseUser, PermissionsMixin):
     photo = models.ImageField(verbose_name="photo",upload_to='images')
     is_active = models.BooleanField(default=False)
 
+    #other fields
+    date_birth = models.DateField(null=True)
+    facebook_link = models.URLField(null=True)
+    country = models.CharField(max_length=50, null=True)
+
     # is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -43,4 +48,5 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomAccountManager()
 
-
+    def __str__(self):
+        return self.email
