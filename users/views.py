@@ -1,5 +1,5 @@
-from users.forms import RegistraionForm, LoginForm
-from django.shortcuts import render, redirect
+from users.forms import RegistraionForm, LoginForm, UpdateUserForm
+from django.shortcuts import render, redirect, reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -118,3 +118,31 @@ def logout_view(request):
     logout(request)
     return redirect('/login')
 
+@login_required(login_url='/login')
+def edit_user_profile(request):
+    form = UpdateUserForm(request.POST, request.FILES, instance=request.user)
+    if request.POST:
+        if form.is_valid():
+            print("photo from form is :", form.cleaned_data["photo"])
+            request.user.photo = form.cleaned_data["photo"]
+            form.save()
+            return redirect(reverse("users:profile"))
+    else:
+        form = UpdateUserForm(
+            initial={
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
+                "phone": request.user.phone,
+                "date_birth": request.user.date_birth,
+                "facebook_link": request.user.facebook_link,
+                "country": request.user.country,
+            }
+        )
+    context = {"form": form}
+    return render(request, "users/edit_user_profile.html", context=context)
+
+@login_required(login_url='/login')
+def user_profile(request):
+    if not request.user.is_authenticated:
+        return redirect(reverse("users:login"))
+    return render(request, "users/user_profile.html")
