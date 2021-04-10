@@ -1,10 +1,11 @@
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from projects.views.category import getCategories
-from projects.models import Project, Category, Tag, Picture ,Project_Donation
+from projects.models import Project, Category, Tag, Picture, Project_Donation
+from projects.models.project import Project_Rate, Project_Comment, Comment_Report
 from django.contrib.auth.decorators import login_required
 from users.models import Users
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 
 @login_required(login_url='/login')
 def addProject(request):
@@ -51,14 +52,16 @@ def viewProject(request , project_id):
     user_id = request.user.id
     total_donation=Project_Donation.objects.filter(project_id=project_id).aggregate(Sum('donationNumber'))
     target_donation=Project.objects.get(id=project_id).total_target * .25
-
-
-    return render(request,'projects/project/viewProject.html' , {"project":project , "images":images , "user_id":user_id , "total_donation":total_donation , "target_donation":target_donation})
+    average_rating = Project_Rate.objects.filter(project_id=project_id).aggregate(Avg('rate'))
+    comments = Project_Comment.objects.filter(project_id=project_id)
+    return render(request,'projects/project/viewProject.html',
+                  {"project": project, "images": images, "user_id": user_id,
+                   "total_donation": total_donation, "target_donation": target_donation,
+                   "average_rating": average_rating, "comments": comments})
 
 def deleteProject(request, project_id):
     Project.objects.filter(id=project_id).delete()
     return redirect('project_add')
-
 
 @login_required(login_url='/login')
 def viewProjects(request):
@@ -73,16 +76,46 @@ def donateProject(request, project_id ,user_id):
     project_donate.save()
     return redirect('projects_view')
 
+def rateProject(request, project_id ,user_id):
+    is_exists = Project_Rate.objects.filter(project_id=project_id, user_id=user_id).count()
 
+    if is_exists > 0:
+        project_rate_record = Project_Rate.objects.get(project_id=project_id, user_id=user_id)
+        project_rate_record.rate = request.POST.get('rate')
+        project_rate_record.save()
+    else:
+        project_rate = Project_Rate()
+        project_rate.user=Users.objects.get(id=user_id)
+        project_rate.project=Project.objects.get(id=project_id)
+        project_rate.rate = request.POST.get('rate')
+        project_rate.save()
+
+    return redirect('projects_view')
+
+@login_required(login_url='/login')
+def commentProject(request, project_id ,user_id):
+    project_comment = Project_Comment()
+    project_comment.user = Users.objects.get(id=user_id)
+    project_comment.project = Project.objects.get(id=project_id)
+    project_comment.comment = request.POST.get('comment')
+    project_comment.save()
+    return redirect('projects_view')
+
+def reportComment(request, user_id, comment_id):
+    project_comment_report = Comment_Report()
+    project_comment_report.user = Users.objects.get(id=user_id)
+    project_comment_report.comment = Project_Comment.objects.get(id=comment_id)
+    project_comment = Project_Comment.objects.get(id=comment_id)
+    project_comment.report = project_comment.report + 1
+
+    project_comment_report.save()
+    project_comment.save()
+    return redirect('projects_view')
 
 @login_required(login_url='/login')
 def viewUserProjects(request , user_id):
     projects=Project.objects.filter(user_id=user_id)
-    return render(request,'projects/user/viewProjects.html' , {"projects":projects ,"user_id":user_id })
-
-
-
-
+    return render(request,'projects/user/viewProjects.html', {"projects": projects,"user_id": user_id})
 
 
 @login_required(login_url='/login')
@@ -92,6 +125,5 @@ def viewUserProject(request ,user_id,project_id):
     user_id = user_id
     total_donation=Project_Donation.objects.filter(project_id=project_id).aggregate(Sum('donationNumber'))
     target_donation=Project.objects.get(id=project_id).total_target * .25
+    return render(request,'projects/user/viewProject.html', {"project": project, "images": images, "user_id": user_id, "total_donation": total_donation, "target_donation":target_donation})
 
-
-    return render(request,'projects/user/viewProject.html' , {"project":project , "images":images , "user_id":user_id , "total_donation":total_donation , "target_donation":target_donation})
