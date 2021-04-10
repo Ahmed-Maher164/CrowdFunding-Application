@@ -1,8 +1,10 @@
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from projects.views.category import getCategories
-from projects.models import Project, Category, Tag, Picture
+from projects.models import Project, Category, Tag, Picture ,Project_Donation
 from django.contrib.auth.decorators import login_required
+from users.models import Users
+from django.db.models import Sum
 
 @login_required(login_url='/login')
 def addProject(request):
@@ -46,8 +48,50 @@ def addProjectDB(request):
 def viewProject(request , project_id):
     project=Project.objects.get(id=project_id)
     images=Picture.objects.filter(project_id=project_id)
-    return render(request,'projects/project/viewProject.html' , {"project":project , "images":images})
+    user_id = request.user.id
+    total_donation=Project_Donation.objects.filter(project_id=project_id).aggregate(Sum('donationNumber'))
+    target_donation=Project.objects.get(id=project_id).total_target * .25
+
+
+    return render(request,'projects/project/viewProject.html' , {"project":project , "images":images , "user_id":user_id , "total_donation":total_donation , "target_donation":target_donation})
 
 def deleteProject(request, project_id):
     Project.objects.filter(id=project_id).delete()
     return redirect('project_add')
+
+
+@login_required(login_url='/login')
+def viewProjects(request):
+    projects = Project.objects.all()
+    return render(request,'projects/project/viewProjects.html' , {"projects":projects })
+
+def donateProject(request, project_id ,user_id):
+    project_donate = Project_Donation()
+    project_donate.user=Users.objects.get(id=user_id)
+    project_donate.project=Project.objects.get(id=project_id)
+    project_donate.donationNumber = request.POST.get('donation')
+    project_donate.save()
+    return redirect('projects_view')
+
+
+
+@login_required(login_url='/login')
+def viewUserProjects(request , user_id):
+    projects=Project.objects.filter(user_id=user_id)
+    return render(request,'projects/user/viewProjects.html' , {"projects":projects ,"user_id":user_id })
+
+
+
+
+
+
+@login_required(login_url='/login')
+def viewUserProject(request ,user_id,project_id):
+    project=Project.objects.get(id=project_id)
+    images=Picture.objects.filter(project_id=project_id)
+    user_id = user_id
+    total_donation=Project_Donation.objects.filter(project_id=project_id).aggregate(Sum('donationNumber'))
+    target_donation=Project.objects.get(id=project_id).total_target * .25
+
+
+    return render(request,'projects/user/viewProject.html' , {"project":project , "images":images , "user_id":user_id , "total_donation":total_donation , "target_donation":target_donation})

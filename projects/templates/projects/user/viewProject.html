@@ -27,13 +27,12 @@
         <img src="{{ img.photo.url }}" width="300" height="300">
      {% endfor %}
 <br><br>
-
-
- <form action="{% url 'project_donate' project.id user_id %}" method="POST" enctype="multipart/form-data">
+    {% if total_donation.donationNumber__sum < target_donation or total_donation.donationNumber__sum == None %}
+        <form action="{% url 'project_delete' project.id  %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-            <input type="number" name="donation" id="">
-            <input type="submit" value="Donate"/>
- </form>
+            <input type="submit" value="Delete"/>
+        </form>
+    {% endif %}
 
 </body>
 </html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>viewProjects</title>
+</head>
+<body>
+<table border="2">
+     <tr>
+         <th>Title</th>
+         <th>Details</th>
+
+     </tr>
+         {% for project in projects %}
+         <tr>
+
+             <td><a href="/project/view/{{ project.id }}">{{ project.title }}</a></td>
+             <td>{{ project.details }}</td>
+         </tr>
+         {% endfor %}
+
+ </table>
+
+</body>
+</html>
