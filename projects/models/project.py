@@ -10,6 +10,8 @@ class Project(models.Model):
     total_target=models.IntegerField()
     start_date=models.DateTimeField()
     end_date=models.DateTimeField()
+    report = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.title
@@ -32,4 +34,8 @@ class Project_Comment(models.Model):
 
 class Comment_Report(models.Model):
     comment = models.ForeignKey(Project_Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+
+class Project_Report(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)

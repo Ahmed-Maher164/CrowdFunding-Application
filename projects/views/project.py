@@ -2,7 +2,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from projects.views.category import getCategories
 from projects.models import Project, Category, Tag, Picture, Project_Donation
-from projects.models.project import Project_Rate, Project_Comment, Comment_Report
+from projects.models.project import Project_Rate, Project_Comment, Comment_Report, Project_Report
 from django.contrib.auth.decorators import login_required
 from users.models import Users
 from django.db.models import Sum, Avg
@@ -127,3 +127,14 @@ def viewUserProject(request ,user_id,project_id):
     target_donation=Project.objects.get(id=project_id).total_target * .25
     return render(request,'projects/user/viewProject.html', {"project": project, "images": images, "user_id": user_id, "total_donation": total_donation, "target_donation":target_donation})
 
+
+def reportProject(request, user_id, project_id):
+    project_report = Project_Report()
+    project_report.user = Users.objects.get(id=user_id)
+    project_report.project = Project.objects.get(id=project_id)
+    project = Project.objects.get(id=project_id)
+    Project.report = project.report + 1
+
+    project_report.save()
+    project.save()
+    return redirect('projects_view')

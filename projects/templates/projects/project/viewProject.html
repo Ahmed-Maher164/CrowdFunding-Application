@@ -64,6 +64,11 @@
 {% endfor %}
 
 
+        <form action="{% url 'project_report' user_id project.id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <input type="submit" value="Report"/>
+        </form>
+
 <script src="{% static 'projects/js/main.js' %}"></script>
 </body>
 </html>

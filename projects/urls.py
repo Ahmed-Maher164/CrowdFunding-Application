@@ -15,6 +15,8 @@ urlpatterns = [
     path('comment/report/<user_id>/<comment_id>', project.reportComment, name="comment_report"),
     path('userprojects/view/<user_id>', project.viewUserProjects, name="user_projects"),
     path('userprojects/view/<user_id>/<project_id>', project.viewUserProject, name="user_project"),
+    path('project/report/<user_id>/<project_id>', project.reportProject, name="project_report"),
+
 ]
 
 if settings.DEBUG:
