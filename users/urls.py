@@ -14,6 +14,7 @@ urlpatterns = [
     path('logout',views.logout_view,name='logout'),
      path('profile',views.user_profile,name="profile"),
     path('profile/update',views.edit_user_profile,name="profile_update"),
+    path('delete',views.delete_account,name="delete_account"),
 
 ]
 

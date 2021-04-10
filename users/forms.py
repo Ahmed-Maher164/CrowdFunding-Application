@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 
 
 
+
 class RegistraionForm(UserCreationForm):
     email = forms.EmailField()
     class Meta:
@@ -16,7 +17,7 @@ class LoginForm(forms.ModelForm):
     password = forms.CharField(label='password',widget=forms.PasswordInput)
     class Meta:
         model = Users
-        fields = ('email','password')
+        fields = ('email','password', 'is_active')
 
     def clean(self):
         if self.is_valid():
@@ -24,6 +25,7 @@ class LoginForm(forms.ModelForm):
             password = self.cleaned_data['password']
             if not authenticate(email=email,password=password):
                 raise forms.ValidationError('invalid login data...')
+
 #===================================================================================================
 
 class DateInput(forms.DateInput):
