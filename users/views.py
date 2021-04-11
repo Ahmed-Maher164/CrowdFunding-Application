@@ -148,7 +148,7 @@ def edit_user_profile(request):
 def user_profile(request):
     if not request.user.is_authenticated:
         return redirect(reverse("users:login"))
-    return render(request, "users/user_profile.html")
+    return render(request, "users/new-user_profile.html")
 
 def send_delete_email(request):
     user = request.user
