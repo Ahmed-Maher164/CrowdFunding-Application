@@ -60,7 +60,7 @@
                     <ul class="nav navbar-nav">
 
                         <li><a class="is-active" href="{% url 'index_page' %}">Home</a></li>
-                        <li><a href="#">MyProfile</a></li>
+                        <li><a href="{% url 'users:profile' %}">MyProfile</a></li>
                         <li class="#"><a href="#">{{user.username|title}}</a>
 
                             <ul class="submenu">
