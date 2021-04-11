@@ -5,29 +5,73 @@
         <meta charset="UTF-8">
         <title>Add Project</title>
         <link rel="stylesheet" href="{% static 'projects/css/style.css' %}">
+         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+     {% load static %}
+    <meta charset="UTF-8">
+    <title>viewProject</title>
+
+     <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Dosis:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- Bootsrap -->
+    <link rel="stylesheet" href="{% static 'projects/css/bootstrap.min.css' %}">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="{% static 'projects/css/font-awesome.min.css' %}">
+
+    <!-- Owl carousel -->
+    <link rel="stylesheet" href="{% static 'projects/css/owl.carousel.css' %}">
+
+    <!-- Template main Css -->
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}">
+
+    <!-- Modernizr -->
+    <script src="{% static 'projects/js/modernizr-2.6.2.min.js' %}"></script>
+        <style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			background: #6495ED !important;
+			color:black
+		}
+		.container{
+		    margin:60
+		}
+
+
+	</style>
     </head>
     <body>
-        <h1>hello project</h1>
+    <div class="container">
+          <h1 class="text-center">Add project</h1>
         <form action="{% url 'project_addProjectDB' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-            Title: <input type="text" name="title"><br><br>
-            Details: <input type="text" name="details"><br><br>
+            Title: <input type="text" name="title" required class="form-control"><br><br>
+            Details: <input type="text" name="details" required class="form-control"><br><br>
             Categories:
-            <select name="categories">
+            <select name="categories" class="form-control">
                 {% for category in all_categories %}
                 <option value="{{category.id}}">{{ category.category_name }}</option>
                 {% endfor %}
             </select><br><br>
-            Tags: <p id="tagButton" onclick="addTag()">Add Tag</p>
+            <p id="tagButton" onclick="addTag()">Click here to add tag</p>
             <div id="tagContainer"></div>
-            Photos: <p id="photoButton" onclick="addPhoto()">Add Photo</p>
+            <hr>
+            <p id="photoButton" onclick="addPhoto()">Add Photo</p>
             <div id="photoContainer"></div>
-            Target: <input type="number" name="total_target"><br><br>
-            Start Date: <input type="date" name="start_date"><br><br>
-            End Date: <input type="date" name="end_date"><br><br>
+            <hr>
+            Target: <input type="number" name="total_target" required class="form-control"><br><br>
+            Start Date: <input type="date" name="start_date" required class="form-control"><br><br>
+            End Date: <input type="date" name="end_date" required class="form-control"><br><br>
             <input type="text" id="countImg" name="counterImg" style="display:none">
-            <input type="submit">
+            <div class="text-center">
+                <input type="submit" class="btn btn-primary">
+            </div>
         </form>
+    </div>
         <script src="{% static 'projects/js/addproject.js' %}"></script>
     </body>
 </html>

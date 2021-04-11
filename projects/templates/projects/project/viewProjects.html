@@ -3,9 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>viewProjects</title>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+     {% load static %}
+    <meta charset="UTF-8">
+    <title>viewProject</title>
+
+     <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Dosis:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- Bootsrap -->
+    <link rel="stylesheet" href="{% static 'projects/css/bootstrap.min.css' %}">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="{% static 'projects/css/font-awesome.min.css' %}">
+
+    <!-- Owl carousel -->
+    <link rel="stylesheet" href="{% static 'projects/css/owl.carousel.css' %}">
+
+    <!-- Template main Css -->
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}">
+
+    <!-- Modernizr -->
+    <script src="{% static 'projects/js/modernizr-2.6.2.min.js' %}"></script>
 </head>
 <body>
-<table border="2">
+<h1 class="text-center">All Projects</h1>
+<br>
+<table border="2" class="table">
+
+    <thead class="thead-dark">
      <tr>
          <th>Title</th>
          <th>Details</th>

@@ -4,8 +4,9 @@
     {% load static %}
     <meta charset="UTF-8">
     <title>viewProject</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-     <!-- Fonts -->
+    <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Dosis:400,700' rel='stylesheet' type='text/css'>
 
@@ -27,119 +28,136 @@
 
 </head>
 <body>
-<table border="2">
-     <tr>
-         <th>Title</th>
-         <th>Details</th>
-         <th>Total Target</th>
-         <th>Start Date</th>
-         <th>End Date</th>
-         <th>Total Donation</th>
-         <th>Average Rating</th>
-     </tr>
-     <tr>
-         <td>{{ project.title }}</td>
-         <td>{{ project.details }}</td>
-         <td>{{ project.total_target }}</td>
-         <td>{{ project.start_date }}</td>
-         <td>{{ project.end_date }}</td>
-         <td>{{ total_donation.donationNumber__sum }}</td>
-         <td>{{ average_rating.rate__avg }}</td>
-     </tr>
- </table>
+<h1 class="text-center">Project Info</h1>
+<br>
+<table border="2" class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th>Title</th>
+        <th>Details</th>
+        <th>Total Target</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Total Donation</th>
+        <th>Average Rating</th>
+    </tr>
+    </thead>
+
+    <tr>
+        <td>{{ project.title }}</td>
+        <td>{{ project.details }}</td>
+        <td>{{ project.total_target }}</td>
+        <td>{{ project.start_date }}</td>
+        <td>{{ project.end_date }}</td>
+        <td>{{ total_donation.donationNumber__sum }}</td>
+        <td>{{ average_rating.rate__avg }}</td>
+    </tr>
+</table>
 <hr>
 
 
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner">
-            <!--    <a href="project/view/{{project.id}}">{{project.title}}</a>-->
-            {% for img in images %}
-                <div class="item {% if forloop.first %}active{% endif %}">
-                    <img src="{{ img.photo.url }}" width="300" height="300">
-                </div>
-            {% endfor %}
-
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <!--    <a href="project/view/{{project.id}}">{{project.title}}</a>-->
+        {% for img in images %}
+        <div class="item {% if forloop.first %}active{% endif %}" style="height:300px">
+            <img src="{{ img.photo.url }}" width="300" height="300"  style="margin:auto">
         </div>
+        {% endfor %}
 
-        <!-- Left and right controls -->
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-            <span class="sr-only">Next</span>
-        </a>
     </div>
 
-
-
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
 
 
 <hr>
 <br><br>
 <form action="{% url 'project_report' user_id project.id %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-            <input type="submit" value="Report"/>
+    <div class="text-center">
+        <input type="submit" value="Report" class="btn btn-danger" style="height:50px; width:100px"/>
+    </div>
 </form>
 <br><br>
- <form action="{% url 'project_donate' project.id user_id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-            <input type="number" name="donation" id="">
-            <input type="submit" value="Donate"/>
- </form>
-<br><br>
- <form action="{% url 'project_rate' project.id user_id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <select name="rate">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-        <input type="submit" value="Rate"/>
- </form>
-<br><br>
- <form action="{% url 'project_comment' project.id user_id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        Comment:
-        <input type="text" name="comment">
-        <input type="submit" value="Comment"/>
- </form>
+<hr>
+<form action="{% url 'project_donate' project.id user_id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="number" name="donation" id="" class="form-control text-center" placeholder="Donate" style="height:60px">
+           <br>
+        <div class="text-center">
+            <input type="submit" value="Donate" class="btn btn-primary" style="height:50px; width:100px"/>
+        </div>
+</form>
+<br>
+<hr>
+<form action="{% url 'project_rate' project.id user_id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="text-center">
+        <select name="rate" style="width:40%; height:40px" required>
+        <option value="" disabled selected>Rate The Project</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    </div>
+    <br><br>
+ <div class="text-center">
+            <input type="submit" value="Rate" class="btn btn-primary" style="height:50px; width:100px"/>
+        </div>
+</form>
+<br>
+<hr>
+<div class="text-center">
+
+<form action="{% url 'project_comment' project.id user_id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    Comment:
+    <input type="text" name="comment">
+    <input type="submit" value="Comment"/>
+</form>
 {% for comment in comments %}
-        <p>{{comment.comment}}</p>
-        <form action="{% url 'comment_report' user_id comment.id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-            <input type="submit" value="Report"/>
-        </form>
+<p>{{comment.comment}}</p>
+<form action="{% url 'comment_report' user_id comment.id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="submit" value="Report"/>
+</form>
 {% endfor %}
-
-{% for tag in project_tags %}
-        <p>{{tag.tag}}</p>
-
-{% endfor %}
+</div>
 
 <hr>
-<div class="similarProject">
 
-
+<h3 class="text-center">Similar Projects Based on Tags</h3>
+<div class="similarProject text-center">
     {% for project in projects_tags_project %}
-        {% if forloop.counter < 5 %}
-            <a href="{% url 'project_view' project.id %}">{{project}}</a> <br>
-        {% endif %}
+    {% if forloop.counter < 5 %}
+    <a href="{% url 'project_view' project.id %}">{{project}}</a> <br>
+    {% endif %}
     {% endfor %}
 
 </div>
-
-
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
 
 <script src="{% static 'projects/js/main.js' %}"></script>
 
@@ -164,7 +182,6 @@
         e.src='//www.google-analytics.com/analytics.js';
         r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
         ga('create','UA-XXXXX-X');ga('send','pageview');
-
 </script>
 </body>
 </html>

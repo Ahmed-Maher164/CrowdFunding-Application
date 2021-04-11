@@ -212,7 +212,6 @@ def searchProjectTitle(request):
 
 def userDonations(request , user_id):
     donation_number= Project_Donation.objects.filter(user_id=user_id)
-
     donation_project=[]
     for i in donation_number:
         project_name= Project.objects.get(id=i.project_id).title
