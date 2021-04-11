@@ -2,7 +2,6 @@ from django.urls import path
 from users.views import register, user_login, activate, index, logout_view
 from django.conf import settings
 from django.conf.urls.static import static
-from projects.views.project import homePage
 
 app_name = 'users'
 

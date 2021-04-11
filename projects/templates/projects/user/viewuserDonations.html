@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>view User Donations</title>
+</head>
+<body>
+<table border="2">
+     <tr>
+         <th>Donation</th>
+         <th>Project Name</th>
+
+     </tr>
+         {% for project in donation_project %}
+         <tr>
+             <td>{{ project.donation_number }}</td>
+             <td><a href="{% url 'project_view' project.project_id  %}">{{ project.project_name }}</a></td>
+         </tr>
+         {% endfor %}
+
+ </table>
+
+</body>
+</html>

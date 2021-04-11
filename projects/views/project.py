@@ -54,12 +54,25 @@ def viewProject(request , project_id):
     target_donation=Project.objects.get(id=project_id).total_target * .25
     average_rating = Project_Rate.objects.filter(project_id=project_id).aggregate(Avg('rate'))
     comments = Project_Comment.objects.filter(project_id=project_id)
-    project_tags= Tag.projects.through.objects.filter(project_id=project_id)
 
+
+    project = Project.objects.get(id=project_id)
+    projects_tags = project.tag_set.all()
+    all_projects_tags=[]
+    all_projects_tags_new=[]
+    for i in projects_tags:
+        search_tag = Tag.objects.get(id=i.id)
+        search_projects_tag = search_tag.projects.all()
+        all_projects_tags.append(search_projects_tag)
+
+    for l in all_projects_tags:
+        all_projects_tags_new += l
+
+    projects_tags_project=set(all_projects_tags_new)
     return render(request,'projects/project/viewProject.html',
                   {"project": project, "images": images, "user_id": user_id,
                    "total_donation": total_donation, "target_donation": target_donation,
-                   "average_rating": average_rating, "comments": comments , "project_tags":project_tags})
+                   "average_rating": average_rating, "comments": comments  , "projects_tags_project":projects_tags_project})
 
 def deleteProject(request, project_id):
     Project.objects.filter(id=project_id).delete()
@@ -157,18 +170,6 @@ def reportProject(request, user_id, project_id):
     return redirect('projects_view')
 
 
-def homePage(request):
-    top_rated_projects_id=Project_Rate.objects.values('project_id').annotate(Avg('rate')).order_by('-rate')[:5]
-    top_rated_projects=[]
-    for i in top_rated_projects_id:
-        project=Project.objects.filter(id=i["project_id"])[0]
-        top_rated_projects.append(project)
-    latest_projects = Project.objects.all().order_by('-id')[:5]
-
-    admin_projects = Project.objects.filter(admin=1).order_by('-id')[:5]
-    categories = getCategories()
-
-    return render(request,'index.html' , {"top_rated_projects":top_rated_projects , "latest_projects":latest_projects , "admin_projects":admin_projects , "categories":categories})
 
 
 def projectCategories(request):
@@ -180,25 +181,41 @@ def projectCategories(request):
 
 @login_required(login_url='/login')
 def index(request):
-    top_rated_projects_id=Project_Rate.objects.values('project_id').annotate(Avg('rate')).order_by('-rate')[:5]
+    top_rated_projects_id=Project_Rate.objects.values('project_id').annotate(Avg('rate')).order_by('-rate')[:4]
     top_rated_projects=[]
     for i in top_rated_projects_id:
         project=Project.objects.filter(id=i["project_id"])[0]
         top_rated_projects.append(project)
-    latest_projects = Project.objects.all().order_by('-id')[:5]
-
-    return render(request,'projects/pages/index.html' ,{"top_rated_projects":top_rated_projects , "latest_projects":latest_projects})
-
-
-def homePage(request):
-    top_rated_projects_id=Project_Rate.objects.values('project_id').annotate(Avg('rate')).order_by('-rate')[:5]
-    top_rated_projects=[]
-    for i in top_rated_projects_id:
-        project=Project.objects.filter(id=i["project_id"])[0]
-        top_rated_projects.append(project)
-    latest_projects = Project.objects.all().order_by('-id')[:5]
-
-    admin_projects = Project.objects.filter(admin=1).order_by('-id')[:5]
+    latest_projects = Project.objects.all().order_by('-id')[:4]
+    admin_projects = Project.objects.filter(admin=1).order_by('-id')[:4]
     categories = getCategories()
 
-    return render(request,'index.html' , {"top_rated_projects":top_rated_projects , "latest_projects":latest_projects , "admin_projects":admin_projects , "categories":categories})
+    return render(request,'projects/pages/index.html' ,{"top_rated_projects":top_rated_projects , "latest_projects":latest_projects ,"admin_projects":admin_projects ,"categories":categories})
+
+def searchProjectTag(request):
+    tag = request.POST.get('tag')
+    tag_obj = Tag.objects.get(tag_name=tag)
+    tag_id=tag_obj.id
+    search_tag = Tag.objects.get(id=tag_id)
+    search_projects_tag=search_tag.projects.all()
+    return render(request,'projects/project/searchProjectsTag.html' ,{"search_projects_tag":search_projects_tag })
+
+
+
+
+
+def searchProjectTitle(request):
+    title=request.POST.get('title')
+    search_projects_title =Project.objects.filter(title__contains=title)
+    return render(request,'projects/project/searchProjectsTitle.html' ,{"search_projects_title":search_projects_title})
+
+
+def userDonations(request , user_id):
+    donation_number= Project_Donation.objects.filter(user_id=user_id)
+
+    donation_project=[]
+    for i in donation_number:
+        project_name= Project.objects.get(id=i.project_id).title
+        donation_project.append({"project_id":i.project_id , "donation_number":i.donationNumber , "project_name":project_name })
+
+    return render(request,'projects/user/viewuserDonations.html' ,{"donation_project":donation_project})

@@ -3,7 +3,7 @@
 <head>
     {% load static %}
     <meta charset="utf-8">
-    <title>SADAKA | Charity / Non-profit responsive Bootstrap HTML5 template</title>
+    <title>CrowdFunding</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Fonts -->
@@ -59,20 +59,19 @@
 
                     <ul class="nav navbar-nav">
 
-                        <li><a class="is-active" href="index.html">HOME</a></li>
-                        <li><a href="about.html">ABOUT</a></li>
-                        <li class="has-child"><a href="#">CAUSES</a>
+                        <li><a class="is-active" href="{% url 'index_page' %}">Home</a></li>
+                        <li><a href="#">MyProfile</a></li>
+                        <li class="#"><a href="#">{{user.username|title}}</a>
 
                             <ul class="submenu">
-                                <li class="submenu-item"><a href="causes.html">Causes list </a></li>
-                                <li class="submenu-item"><a href="causes-single.html">Single cause </a></li>
-                                <li class="submenu-item"><a href="causes-single.html">Single cause </a></li>
-                                <li class="submenu-item"><a href="causes-single.html">Single cause </a></li>
+                                <li class="submenu-item"><a href="{% url 'user_projects' user.id %}">my Projects</a></li>
+                                <li class="submenu-item"><a href="{% url 'user_donations' user.id %}">my Donations</a></li>
+
                             </ul>
 
                         </li>
-                        <li><a href="gallery.html">GALLERY</a></li>
-                        <li><a href="{% url 'users:logout'%}">LOGOUT</a></li>
+                        <li><a href="{% url 'project_add' %}">Create Project</a></li>
+                        <li><a href="{% url 'users:logout'%}">Logout</a></li>
 
                     </ul>
 
@@ -112,7 +111,7 @@
                     <h2 class="carousel-title bounceInDown animated slow">Because they need your help</h2>
                     <h4 class="carousel-subtitle bounceInUp animated slow ">Do not let them down</h4>
                     <a href="{% url 'projects_view' %}"
-                       class="btn btn-lg btn-secondary hidden-xs bounceInUp animated slow" data-toggle="modal"
+                       class="btn btn-lg btn-secondary hidden-xs bounceInUp animated slow"
                        data-target="#donateModal">DONATE NOW</a>
 
                 </div> <!-- /.carousel-caption -->
@@ -132,8 +131,9 @@
 
                     <h2 class="carousel-title bounceInDown animated slow">Together we can improve their lives</h2>
                     <h4 class="carousel-subtitle bounceInUp animated slow"> So let's do it !</h4>
-                    <a href="{% url 'projects_view' %}" class="btn btn-lg btn-secondary hidden-xs bounceInUp animated"
-                       data-toggle="modal" data-target="#donateModal">DONATE NOW</a>
+                    <a href="{% url 'projects_view' %}"
+                       class="btn btn-lg btn-secondary hidden-xs bounceInUp animated"
+                       data-target="#donateModal">DONATE NOW</a>
 
                 </div> <!-- /.carousel-caption -->
 
@@ -154,7 +154,7 @@
                         a penny.</h2>
                     <h4 class="carousel-subtitle bounceInUp animated slow">You can make the diffrence !</h4>
                     <a href="{% url 'projects_view' %}"
-                       class="btn btn-lg btn-secondary hidden-xs bounceInUp animated slow" data-toggle="modal"
+                       class="btn btn-lg btn-secondary hidden-xs bounceInUp animated slow"
                        data-target="#donateModal">DONATE NOW</a>
 
                 </div> <!-- /.carousel-caption -->
@@ -178,8 +178,6 @@
 </div><!-- /.carousel -->
 
 
-
-
 <center>
     <h1>Highest Rated Projects</h1>
 
@@ -193,15 +191,17 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
 
-<!--    <a href="project/view/{{project.id}}">{{project.title}}</a>-->
-            <div class="item active">
+            <!--    <a href="project/view/{{project.id}}">{{project.title}}</a>-->
+            {% for top_rated_project in top_rated_projects %}
+            <div class="item {% if forloop.first %}active{% endif %}">
                 <div>
                     <div class="card text-white bg-primary mb-3" style="width: 300px; height: 250px">
                         <div class="card-body">
-                            <h1 class="card-title">{{top_rated_projects.0}}</h1>
-                            <p class="card-text">{{top_rated_projects.0.details}}</p>
+                            <h1 class="card-title">{{top_rated_project}}</h1>
+                            <p class="card-text">{{top_rated_project.details}}</p>
                             <br><br>
-                            <a href="{% url 'project_view' top_rated_projects.0.id %}" class="btn btn-primary">Details</a>
+                            <a href="{% url 'project_view' top_rated_project.id %}"
+                               class="btn btn-primary">Details</a>
                             <br>
                         </div>
                     </div>
@@ -209,39 +209,8 @@
 
                 </div>
             </div>
+            {% endfor %}
 
-
-            <div class="item ">
-                <div>
-                    <div class="card text-white bg-primary mb-3" style="width: 300px; height: 250px">
-                        <div class="card-body">
-                            <h1 class="card-title">{{top_rated_projects.1}}</h1>
-                            <p class="card-text">{{top_rated_projects.1.details}}</p>
-                            <br><br>
-                            <a href="{% url 'project_view' top_rated_projects.1.id %}" class="btn btn-primary">Details</a>
-                            <br>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <div class="item ">
-                <div>
-                    <div class="card text-white bg-primary mb-3" style="width: 300px; height: 250px">
-                        <div class="card-body">
-                            <h1 class="card-title">{{top_rated_projects.2}}</h1>
-                            <p class="card-text">{{top_rated_projects.2.details}}</p>
-                            <br><br>
-                            <a href="{% url 'project_view' top_rated_projects.2.id %}" class="btn btn-primary">Details</a>
-                            <br>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
 
 
 
@@ -262,7 +231,7 @@
 
 </center>
 
-
+<h1 class="text-center">Latest Projects</h1>
 <div class="section-home about-us fadeIn animated">
 
     <div class="container px-5 py-5">
@@ -270,599 +239,133 @@
         <div class="row">
 
             {% for project in latest_projects %}
-                <div class="col-md-2 {% if forloop.first %}col-md-offset-1{% endif %}">
+            <div class="col-md-3">
 
                 <div class="about-us-col">
 
-                    <div class="col-icon-wrapper">
-                        <img src="assets/images/icons/our-mission-icon.png" alt="">
-                    </div>
-                    <h3 class="col-title">our mission</h3>
+                    <h3 class="col-title">{{project.title}}</h3>
                     <div class="col-details">
 
-                        <p>Lorem ipsum dolor sit amet consect adipisscin elit proin vel lectus ut eta esami vera dolor
-                            sit amet consect</p>
+                        <p>{{project.details}}</p>
 
                     </div>
-                    <a href="#" class="btn btn-primary"> Read more </a>
+                    <a href="{% url 'project_view' project.id %}" class="btn btn-primary">Details</a>
 
                 </div>
 
             </div>
             {% endfor %}
 
-<!--            <div class="col-md-2 col-sm-6">-->
-
-<!--                <div class="about-us-col">-->
-
-<!--                    <div class="col-icon-wrapper">-->
-<!--                        <img src="assets/images/icons/make-donation-icon.png" alt="">-->
-<!--                    </div>-->
-<!--                    <h3 class="col-title">Make donations</h3>-->
-<!--                    <div class="col-details">-->
-
-<!--                        <p>Lorem ipsum dolor sit amet consect adipisscin elit proin vel lectus ut eta esami vera dolor-->
-<!--                            sit amet consect</p>-->
-
-<!--                    </div>-->
-<!--                    <a href="#" class="btn btn-primary"> Read more </a>-->
-
-<!--                </div>-->
-
-<!--            </div>-->
-
-
-<!--            <div class="col-md-2 col-sm-6">-->
-
-<!--                <div class="about-us-col">-->
-
-<!--                    <div class="col-icon-wrapper">-->
-<!--                        <img src="assets/images/icons/help-icon.png" alt="">-->
-<!--                    </div>-->
-<!--                    <h3 class="col-title">Help & support</h3>-->
-<!--                    <div class="col-details">-->
-
-<!--                        <p>Lorem ipsum dolor sit amet consect adipisscin elit proin vel lectus ut eta esami vera dolor-->
-<!--                            sit amet consect</p>-->
-
-<!--                    </div>-->
-<!--                    <a href="#" class="btn btn-primary"> Read more </a>-->
-
-<!--                </div>-->
-
-<!--            </div>-->
-
-
-<!--            <div class="col-md-2 col-sm-6">-->
-
-<!--                <div class="about-us-col">-->
-
-<!--                    <div class="col-icon-wrapper">-->
-<!--                        <img src="assets/images/icons/programs-icon.png" alt="">-->
-<!--                    </div>-->
-<!--                    <h3 class="col-title">our programs</h3>-->
-<!--                    <div class="col-details">-->
-
-<!--                        <p>Lorem ipsum dolor sit amet consect adipisscin elit proin vel lectus ut eta esami vera dolor-->
-<!--                            sit amet consect</p>-->
-
-<!--                    </div>-->
-<!--                    <a href="#" class="btn btn-primary"> Read more </a>-->
-
-<!--                </div>-->
-
-<!--            </div>-->
-
-<!--            <div class="col-md-2 col-sm-6">-->
-
-<!--                <div class="about-us-col">-->
-
-<!--                    <div class="col-icon-wrapper">-->
-<!--                        <img src="assets/images/icons/programs-icon.png" alt="">-->
-<!--                    </div>-->
-<!--                    <h3 class="col-title">our programs</h3>-->
-<!--                    <div class="col-details">-->
-
-<!--                        <p>Lorem ipsum dolor sit amet consect adipisscin elit proin vel lectus ut eta esami vera dolor-->
-<!--                            sit amet consect</p>-->
-
-<!--                    </div>-->
-<!--                    <a href="#" class="btn btn-primary"> Read more </a>-->
-
-<!--                </div>-->
-
-<!--            </div>-->
-
-
-
         </div>
 
     </div>
 
-</div> <!-- /.about-us -->
+</div> <!-- latest Project -->
 
-<div class="section-home home-reasons">
+<h1 class="text-center">Featured Projects</h1>
+<div class="section-home about-us fadeIn animated">
 
-    <div class="container">
+    <div class="container px-5 py-5">
 
         <div class="row">
 
-            <div class="col-md-6">
+            {% for project in admin_projects %}
+            <div class="col-md-3">
 
-                <div class="reasons-col animate-onscroll fadeIn">
+                <div class="about-us-col">
 
-                    <img src="assets/images/reasons/we-fight-togother.jpg" alt="">
+                    <h3 class="col-title">{{project.title}}</h3>
+                    <div class="col-details">
 
-                    <div class="reasons-titles">
-
-                        <h3 class="reasons-title">We fight together</h3>
-                        <h5 class="reason-subtitle">We are humans</h5>
-
-                    </div>
-
-                    <div class="on-hover hidden-xs">
-
-                        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur praesentium, itaque
-                            facilis nesciunt ab omnis cumque similique ipsa veritatis perspiciatis, harum ad at nihil
-                            molestias, dignissimos sint consequuntur. Officia, fuga.</p>
-
-
-                        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur praesentium, itaque
-                            facilis nesciunt ab omnis cumque similique ipsa veritatis perspiciatis, harum ad at nihil
-                            molestias, dignissimos sint consequuntur. Officia, fuga.</p>
-
-                        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur praesentium, itaque
-                            facilis nesciunt ab omnis cumque similique ipsa veritatis perspiciatis, harum ad at nihil
-                            molestias, dignissimos sint consequuntur. Officia, fuga.</p>
+                        <p>{{project.details}}</p>
 
                     </div>
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6">
-
-                <div class="reasons-col animate-onscroll fadeIn">
-
-                    <img src="assets/images/reasons/we-care-about.jpg" alt="">
-
-                    <div class="reasons-titles">
-
-                        <h3 class="reasons-title">WE care about others</h3>
-                        <h5 class="reason-subtitle">We are humans</h5>
-
-                    </div>
-
-                    <div class="on-hover hidden-xs">
-
-                        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur praesentium, itaque
-                            facilis nesciunt ab omnis cumque similique ipsa veritatis perspiciatis, harum ad at nihil
-                            molestias, dignissimos sint consequuntur. Officia, fuga.</p>
-
-
-                        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur praesentium, itaque
-                            facilis nesciunt ab omnis cumque similique ipsa veritatis perspiciatis, harum ad at nihil
-                            molestias, dignissimos sint consequuntur. Officia, fuga.</p>
-
-                        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur praesentium, itaque
-                            facilis nesciunt ab omnis cumque similique ipsa veritatis perspiciatis, harum ad at nihil
-                            molestias, dignissimos sint consequuntur. Officia, fuga.</p>
-
-                    </div>
-
+                    <a href="{% url 'project_view' project.id %}" class="btn btn-primary">Details</a>
 
                 </div>
-
             </div>
-
+            {% endfor %}
 
         </div>
 
-
     </div>
+</div> <!-- /.about-us -->
 
-
-</div> <!-- /.home-reasons -->
 
 <div class="section-home our-causes animate-onscroll fadeIn">
 
     <div class="container">
 
-        <h2 class="title-style-1">Our Causes <span class="title-under"></span></h2>
+        <h2 class="title-style-1">Our Categories<span class="title-under"></span></h2>
 
-        <div class="row">
-
-            <div class="col-md-3 col-sm-6">
-
-                <div class="cause">
-
-                    <img src="assets/images/causes/cause-hunger.jpg" alt="" class="cause-img">
-
-                    <div class="progress cause-progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 30%;">
-                            10$ / 500$
-                        </div>
-                    </div>
-
-                    <h4 class="cause-title"><a href="#">HUNGER AND POVERTY </a></h4>
-                    <div class="cause-details">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at eros rutrum turpis viverra
-                        elementum semper quis ex. Donec lorem nulla, aliquam quis neque vel, maximus lacinia urna.
-                    </div>
-
-                    <div class="btn-holder text-center">
-
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#donateModal"> DONATE
-                            NOW</a>
-
-                    </div>
-
-
-                </div> <!-- /.cause -->
-
-            </div>
-
-            <div class="col-md-3 col-sm-6">
-
-                <div class="cause">
-
-                    <img src="assets/images/causes/cause-education.jpg" alt="" class="cause-img">
-
-                    <div class="progress cause-progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 60%;">
-                            400$ / 700$
-                        </div>
-                    </div>
-
-                    <h4 class="cause-title"><a href="#">EDUCATION AND TRAINING</a></h4>
-                    <div class="cause-details">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at eros rutrum turpis viverra
-                        elementum semper quis ex. Donec lorem nulla, aliquam quis neque vel, maximus lacinia urna.
-                    </div>
-
-                    <div class="btn-holder text-center">
-
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#donateModal"> DONATE
-                            NOW</a>
-
-                    </div>
-
-
-                </div> <!-- /.cause -->
-
-            </div>
-
-
-            <div class="col-md-3 col-sm-6">
-
-                <div class="cause">
-
-                    <img src="assets/images/causes/cause-rights.jpg" alt="" class="cause-img">
-
-                    <div class="progress cause-progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 40%;">
-                            400$ / 1000$
-                        </div>
-                    </div>
-
-                    <h4 class="cause-title"><a href="#">HUMAN RIGHTS</a></h4>
-                    <div class="cause-details">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at eros rutrum turpis viverra
-                        elementum semper quis ex. Donec lorem nulla, aliquam quis neque vel, maximus lacinia urna.
-                    </div>
-
-                    <div class="btn-holder text-center">
-
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#donateModal"> DONATE
-                            NOW</a>
-
-                    </div>
-
-
-                </div> <!-- /.cause -->
-
-            </div>
-
-            <div class="col-md-3 col-sm-6">
-
-                <div class="cause">
-
-                    <img src="assets/images/causes/cause-culture.jpg" alt="" class="cause-img">
-
-                    <div class="progress cause-progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 60%;">
-                            400$ / 700$
-                        </div>
-                    </div>
-
-                    <h4 class="cause-title"><a href="#">ARTS AND CULTURE </a></h4>
-                    <div class="cause-details">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at eros rutrum turpis viverra
-                        elementum semper quis ex. Donec lorem nulla, aliquam quis neque vel, maximus lacinia urna.
-                    </div>
-
-                    <div class="btn-holder text-center">
-
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#donateModal"> DONATE
-                            NOW</a>
-
-                    </div>
-
-
-                </div> <!-- /.cause -->
-
-            </div>
-
+        <div class="categories">
+            <form action="{% url 'project_categories'  %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <select name="categories" id="" class="form-select" style="width:80%;height:40px;font-size: 24px;">
+                    {% for cat in categories %}
+                    <option value="{{cat.id}}">{{cat.category_name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Choose Category" style="font-size: 24px;">
+            </form>
         </div>
 
     </div>
 
-</div> <!-- /.our-causes -->
+</div> <!-- Categories -->
 
 
-<!--    <div class="section-home our-sponsors animate-onscroll fadeIn">-->
-<!--    -->
-<!--        <div class="container">-->
 
-<!--            <h2 class="title-style-1">Our Sponsors <span class="title-under"></span></h2>-->
+<div class="section-home our-causes animate-onscroll fadeIn">
 
-<!--            <ul class="owl-carousel list-unstyled list-sponsors">-->
+    <div class="container">
 
-<!--              <li> <img src="{% static 'projects/images/sponsors/bus.png' %}"  alt=""></li>-->
-<!--              <li> <img src="{% static 'projects/images/sponsors/wikimedia.png' %}" alt=""></li>-->
-<!--              <li> <img src="{% static 'projects/images/sponsors/one-world.png' %}" alt=""></li>-->
-<!--              <li> <img src="{% static 'projects/images/sponsors/one-world.png' %}" alt=""></li>-->
-<!--              <li> <img src="{% static 'projects/images/sponsors/one-world.png' %}" alt=""></li>-->
+        <h2 class="title-style-1">Search By Title<span class="title-under"></span></h2>
 
+        <div class="categories">
+            <form action="{% url 'project_search_title'  %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="text" name="title" style="width:80%;height:40px;font-size: 24px;" class="form-select" placeholder="Enter Title">
+                <input type="submit" value="Search" style="font-size: 24px;">
+            </form>
+        </div>
 
-<!--            </ul>-->
+    </div>
 
-<!--        </div>-->
-
-<!--    </div> &lt;!&ndash; /.our-sponsors &ndash;&gt;-->
+</div> <!-- Categories -->
 
 
+<div class="section-home our-causes animate-onscroll fadeIn">
+
+    <div class="container">
+
+        <h2 class="title-style-1">Search By Tag<span class="title-under"></span></h2>
+
+        <div class="categories">
+            <form action="{% url 'project_search_tag'  %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="text" name="tag" style="width:80%;height:40px;font-size: 24px;" class="form-select" placeholder="Enter Tag ">
+                <input type="submit" value="Search" style="font-size: 24px;">
+            </form>
+        </div>
+
+    </div>
+
+</div> <!-- Categories -->
+
+<div style="margin-top:100px"></div>
 <footer class="main-footer">
-
-    <div class="footer-top">
-
-    </div>
-
-
-    <div class="footer-main">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-md-4">
-
-                    <div class="footer-col">
-
-                        <h4 class="footer-title">About us <span class="title-under"></span></h4>
-
-                        <div class="footer-content">
-
-                            <p>
-                                <strong>Sadaka</strong> ipsum dolor sit amet, consectetur adipiscing elit. Ut at eros
-                                rutrum turpis viverra elementum semper quis ex. Donec lorem nulla, aliquam quis neque
-                                vel, maximus lacinia urna.
-                            </p>
-
-                            <p>
-                                ILorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at eros rutrum turpis
-                                viverra elementum semper quis ex. Donec lorem nulla, aliquam quis neque vel, maximus
-                                lacinia urna.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="footer-col">
-
-                        <h4 class="footer-title">LAST TWEETS <span class="title-under"></span></h4>
-
-                        <div class="footer-content">
-                            <ul class="tweets list-unstyled">
-                                <li class="tweet">
-
-                                    20 Surprise Eggs, Kinder Surprise Cars 2 Thomas Spongebob Disney Pixar
-                                    http://t.co/fTSazikPd4
-
-                                </li>
-
-                                <li class="tweet">
-
-                                    20 Surprise Eggs, Kinder Surprise Cars 2 Thomas Spongebob Disney Pixar
-                                    http://t.co/fTSazikPd4
-
-                                </li>
-
-                                <li class="tweet">
-
-                                    20 Surprise Eggs, Kinder Surprise Cars 2 Thomas Spongebob Disney Pixar
-                                    http://t.co/fTSazikPd4
-
-                                </li>
-
-                            </ul>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="col-md-4">
-
-                    <div class="footer-col">
-
-                        <h4 class="footer-title">Contact us <span class="title-under"></span></h4>
-
-                        <div class="footer-content">
-
-                            <div class="footer-form">
-
-                                <div class="footer-form">
-
-                                    <form action="php/mail.php" class="ajax-form">
-
-                                        <div class="form-group">
-                                            <input type="text" name="name" class="form-control" placeholder="Name"
-                                                   required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="email" name="email" class="form-control" placeholder="E-mail"
-                                                   required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <textarea name="message" class="form-control" placeholder="Message"
-                                                      required></textarea>
-                                        </div>
-
-                                        <div class="form-group alerts">
-
-                                            <div class="alert alert-success" role="alert">
-
-                                            </div>
-
-                                            <div class="alert alert-danger" role="alert">
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-submit pull-right">Send message
-                                            </button>
-                                        </div>
-
-                                    </form>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="clearfix"></div>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
     <div class="footer-bottom">
 
         <div class="container text-right">
-            Sadaka @ copyrights 2015 - by <a href="http://www.ouarmedia.com" target="_blank">Ouarmedia</a>
+            Cloud Platform @ copyrights 2021 - by ITI
         </div>
     </div>
 
 </footer> <!-- main-footer -->
 
 
-<!-- Donate Modal -->
-<div class="modal fade" id="donateModal" tabindex="-1" role="dialog" aria-labelledby="donateModalLabel"
-     aria-hidden="true">
 
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="donateModalLabel">DONATE NOW</h4>
-            </div>
-            <div class="modal-body">
-
-                <form class="form-donation">
-
-                    <h3 class="title-style-1 text-center">Thank you for your donation <span class="title-under"></span>
-                    </h3>
-
-                    <div class="row">
-
-                        <div class="form-group col-md-12 ">
-                            <input type="text" class="form-control" id="amount" placeholder="AMOUNT(€)">
-                        </div>
-
-                    </div>
-
-
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control" name="firstName" placeholder="First name*">
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control" name="lastName" placeholder="Last name*">
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control" name="email" placeholder="Email*">
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control" name="phone" placeholder="Phone">
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="form-group col-md-12">
-                            <input type="text" class="form-control" name="address" placeholder="Address">
-                        </div>
-
-                    </div>
-
-
-                    <div class="row">
-
-                        <div class="form-group col-md-12">
-                            <textarea cols="30" rows="4" class="form-control" name="note"
-                                      placeholder="Additional note"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="form-group col-md-12">
-                            <button type="submit" class="btn btn-primary pull-right" name="donateNow">DONATE NOW
-                            </button>
-                        </div>
-
-                    </div>
-
-
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-</div> <!-- /.modal -->
 
 
 <!--  Scripts
