@@ -14,7 +14,8 @@ urlpatterns = [
     path('logout',views.logout_view,name='logout'),
      path('profile',views.user_profile,name="profile"),
     path('profile/update',views.edit_user_profile,name="profile_update"),
-    path('delete',views.delete_account,name="delete_account"),
+    path('profile/delete/request',views.send_delete_email,name="delete_request"),
+    path('profile/delete/response/<uidb64>/<time>',views.delete_account, name='account_delete'),
 
 ]
 
