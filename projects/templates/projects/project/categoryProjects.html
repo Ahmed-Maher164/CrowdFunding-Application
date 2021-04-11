@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>category Projects</title>
+</head>
+<body>
+<div class="categoryProjects">
+    <h1>category Projects</h1>
+    {% for project in category_projects %}
+    <a href="project/view/{{project.id}}">{{project.title}}</a>
+    <br><br>
+{% endfor %}
+</div>
+
+</body>
+</html>

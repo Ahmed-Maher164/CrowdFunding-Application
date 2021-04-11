@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CrowdFund</title>
+</head>
+<body>
+    <h1>home page</h1>
+<div class="logout">
+    <a href="{% url 'users:logout'%}">Logout</a>
+</div>
+
+    <br><br>
+<div class="topRated">
+    <h1>Top Rated Projects</h1>
+    {% for project in top_rated_projects %}
+    <a href="project/view/{{project.id}}">{{project.title}}</a>
+    <br><br>
+{% endfor %}
+</div>
+
+<div class="topRated">
+    <h1>Latest Projects</h1>
+    {% for project in latest_projects %}
+    <a href="project/view/{{project.id}}">{{project.title}}</a>
+    <br><br>
+{% endfor %}
+</div>
+
+
+<div class="adminProjects">
+    <h1>Selected Projects by Admin</h1>
+    {% for project in admin_projects %}
+    <a href="project/view/{{project.id}}">{{project.title}}</a>
+    <br><br>
+{% endfor %}
+</div>
+
+<div class="categories">
+    <form action="{% url 'project_categories'  %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <select name="categories" id="">
+               {% for cat in categories %}
+                    <option value="{{cat.id}}">{{cat.category_name}}</option>
+                {% endfor %}
+        </select>
+        <input type="submit" value="Choose Category">
+    </form>
+</div>
+
+
+
+</body>
+</html>

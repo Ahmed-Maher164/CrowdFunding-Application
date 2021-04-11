@@ -31,6 +31,11 @@
      {% endfor %}
 <br><br>
 
+<form action="{% url 'project_report' user_id project.id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+            <input type="submit" value="Report"/>
+</form>
+<br><br>
  <form action="{% url 'project_donate' project.id user_id %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
             <input type="number" name="donation" id="">
@@ -63,11 +68,16 @@
         </form>
 {% endfor %}
 
+{% for tag in project_tags %}
+        <p>{{tag.tag}}</p>
 
-        <form action="{% url 'project_report' user_id project.id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-            <input type="submit" value="Report"/>
-        </form>
+{% endfor %}
+
+<div class="similarProject">
+
+</div>
+
+
 
 <script src="{% static 'projects/js/main.js' %}"></script>
 </body>

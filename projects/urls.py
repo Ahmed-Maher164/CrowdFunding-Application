@@ -16,7 +16,9 @@ urlpatterns = [
     path('userprojects/view/<user_id>', project.viewUserProjects, name="user_projects"),
     path('userprojects/view/<user_id>/<project_id>', project.viewUserProject, name="user_project"),
     path('project/report/<user_id>/<project_id>', project.reportProject, name="project_report"),
-
+    path('projectCategories', project.projectCategories, name="project_categories"),
+    # path('', project.homePage, name='home'),
+    path('', project.index)
 ]
 
 if settings.DEBUG:

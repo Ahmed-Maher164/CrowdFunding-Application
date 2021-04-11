@@ -11,6 +11,8 @@ class Project(models.Model):
     start_date=models.DateTimeField()
     end_date=models.DateTimeField()
     report = models.IntegerField(default=0)
+    admin = models.BooleanField(default=False)
+
 
 
     def __str__(self):

@@ -54,10 +54,12 @@ def viewProject(request , project_id):
     target_donation=Project.objects.get(id=project_id).total_target * .25
     average_rating = Project_Rate.objects.filter(project_id=project_id).aggregate(Avg('rate'))
     comments = Project_Comment.objects.filter(project_id=project_id)
+    project_tags= Tag.projects.through.objects.filter(project_id=project_id)
+
     return render(request,'projects/project/viewProject.html',
                   {"project": project, "images": images, "user_id": user_id,
                    "total_donation": total_donation, "target_donation": target_donation,
-                   "average_rating": average_rating, "comments": comments})
+                   "average_rating": average_rating, "comments": comments , "project_tags":project_tags})
 
 def deleteProject(request, project_id):
     Project.objects.filter(id=project_id).delete()
@@ -102,14 +104,23 @@ def commentProject(request, project_id ,user_id):
     return redirect('projects_view')
 
 def reportComment(request, user_id, comment_id):
-    project_comment_report = Comment_Report()
-    project_comment_report.user = Users.objects.get(id=user_id)
-    project_comment_report.comment = Project_Comment.objects.get(id=comment_id)
-    project_comment = Project_Comment.objects.get(id=comment_id)
-    project_comment.report = project_comment.report + 1
+    is_exists = Comment_Report.objects.filter(comment_id=comment_id, user_id=user_id).count()
+    if is_exists > 0:
+        return redirect('projects_view')
+    else:
+        project_comment_report = Comment_Report()
+        project_comment_report.user = Users.objects.get(id=user_id)
+        project_comment_report.comment = Project_Comment.objects.get(id=comment_id)
+        project_comment = Project_Comment.objects.get(id=comment_id)
+        project_comment.report = project_comment.report + 1
+        if project_comment.report > 10:
+            project_comment.delete()
+        else:
+            project_comment_report.save()
+            project_comment.save()
 
-    project_comment_report.save()
-    project_comment.save()
+
+
     return redirect('projects_view')
 
 @login_required(login_url='/login')
@@ -129,12 +140,65 @@ def viewUserProject(request ,user_id,project_id):
 
 
 def reportProject(request, user_id, project_id):
-    project_report = Project_Report()
-    project_report.user = Users.objects.get(id=user_id)
-    project_report.project = Project.objects.get(id=project_id)
-    project = Project.objects.get(id=project_id)
-    Project.report = project.report + 1
-
-    project_report.save()
-    project.save()
+    is_exists = Project_Report.objects.filter(project_id=project_id, user_id=user_id).count()
+    if is_exists > 0:
+        return redirect('projects_view')
+    else:
+        project_report = Project_Report()
+        project_report.user = Users.objects.get(id=user_id)
+        project_report.project = Project.objects.get(id=project_id)
+        project = Project.objects.get(id=project_id)
+        project.report = project.report + 1
+        if project.report > 10:
+            project.delete()
+        else:
+            project_report.save()
+            project.save()
     return redirect('projects_view')
+
+
+def homePage(request):
+    top_rated_projects_id=Project_Rate.objects.values('project_id').annotate(Avg('rate')).order_by('-rate')[:5]
+    top_rated_projects=[]
+    for i in top_rated_projects_id:
+        project=Project.objects.filter(id=i["project_id"])[0]
+        top_rated_projects.append(project)
+    latest_projects = Project.objects.all().order_by('-id')[:5]
+
+    admin_projects = Project.objects.filter(admin=1).order_by('-id')[:5]
+    categories = getCategories()
+
+    return render(request,'index.html' , {"top_rated_projects":top_rated_projects , "latest_projects":latest_projects , "admin_projects":admin_projects , "categories":categories})
+
+
+def projectCategories(request):
+    category = request.POST.get('categories')
+    category_projects = Project.objects.filter(category_id=category)
+    return render(request,'projects/project/categoryProjects.html' , {"category_projects":category_projects })
+
+
+
+@login_required(login_url='/login')
+def index(request):
+    top_rated_projects_id=Project_Rate.objects.values('project_id').annotate(Avg('rate')).order_by('-rate')[:5]
+    top_rated_projects=[]
+    for i in top_rated_projects_id:
+        project=Project.objects.filter(id=i["project_id"])[0]
+        top_rated_projects.append(project)
+    latest_projects = Project.objects.all().order_by('-id')[:5]
+
+    return render(request,'projects/pages/index.html' ,{"top_rated_projects":top_rated_projects , "latest_projects":latest_projects})
+
+
+def homePage(request):
+    top_rated_projects_id=Project_Rate.objects.values('project_id').annotate(Avg('rate')).order_by('-rate')[:5]
+    top_rated_projects=[]
+    for i in top_rated_projects_id:
+        project=Project.objects.filter(id=i["project_id"])[0]
+        top_rated_projects.append(project)
+    latest_projects = Project.objects.all().order_by('-id')[:5]
+
+    admin_projects = Project.objects.filter(admin=1).order_by('-id')[:5]
+    categories = getCategories()
+
+    return render(request,'index.html' , {"top_rated_projects":top_rated_projects , "latest_projects":latest_projects , "admin_projects":admin_projects , "categories":categories})
