@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>search Projects</title>
+</head>
+<body>
+<div class="categoryProjects">
+    <h1>Matched Projects by Tag</h1>
+    {% for project in search_projects_tag %}
+    <a href="project/view/{{project.id}}">{{project.title}}</a>
+    <br><br>
+    {% endfor %}
+</div>
+
+</body>
+</html>
